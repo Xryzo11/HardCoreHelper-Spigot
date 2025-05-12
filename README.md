@@ -5,15 +5,15 @@
 The plugin is addressed as 'HC', and all commands are called using '/hc'.
 <br>
 <h3>Currently implemented functions</h3>
-- Kick all players with death message upon player death
-- Stop server after player death
-- Shared inventory
-- Shared health
-- Shared hunger
-- Shared experience
-- Shared effects
-- Player locator on the action bar (select a player via command)
-- Player locator on the side scoreboard (shows 5 closest players, may be CPU heavy)
+- Kick all players with death message upon player death<br>
+- Stop server after player death<br>
+- Shared inventory<br>
+- Shared health<br>
+- Shared hunger<br>
+- Shared experience<br>
+- Shared effects<br>
+- Player locator on the action bar (select a player via command)<br>
+- Player locator on the side scoreboard (shows 5 closest players, may be CPU heavy)<br>
 <br><br>
 <h3>Config with default options explained</h3>
 
