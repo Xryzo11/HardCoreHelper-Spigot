@@ -33,7 +33,7 @@ kickOnDeath: true #Kick all players on player death with the death message as th
 stopServerOnDeath: true #Stop server on player death. Boolean value
 autoActionBar: true #Automatically enable the action bar locator for players upon joining with the default target being self. Boolean value
 giveAllRecipes: true #Unlock all recipes in the recipe book to players upon joining. Boolean value
-enableSideLocator: false #Enable the side scoreboard locator. Does not turn on for players automatially. May be CPU heavy. Boolean value
+enableSideLocator: false #Enable the side scoreboard locator. Does not turn on for players automatically. May be CPU heavy. Boolean value
 ```
 
 <br><br>
