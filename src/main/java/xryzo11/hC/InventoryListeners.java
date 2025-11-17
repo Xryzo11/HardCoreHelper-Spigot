@@ -230,23 +230,31 @@ public class InventoryListeners implements Listener {
         }
     }
 
-//    @EventHandler
-//    public void onPlayerInteract(PlayerInteractEvent event) {
-//        if (event.getPlayer() instanceof Player player) {
-//            if (debug) Bukkit.broadcastMessage("PlayerInteractEvent" + isUpdating);
-//            if (isUpdating) {
-//                event.setCancelled(true);
-//                return;
-//            }
-//            updateInventory(player);
-//        }
-//    }
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getPlayer() instanceof Player player) {
+            if (debug) Bukkit.broadcastMessage("PlayerInteractEvent" + isUpdating);
+            if (event.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_AIR &&
+                event.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
+                return;
+            }
+            org.bukkit.inventory.ItemStack item = event.getItem();
+            if (item != null && (item.getType().name().contains("BOAT") ||
+                    item.getType().name().contains("MINECART"))) {
+//                if (isUpdating) {
+//                    event.setCancelled(true);
+//                    return;
+//                }
+                updateInventory(player);
+            }
+        }
+    }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getPlayer() instanceof Player player) {
             if (debug) Bukkit.broadcastMessage("BlockPlaceEvent" + isUpdating);
-            if (isUpdating) {
+            if (isUpdating && event.getBlockPlaced().getType() != org.bukkit.Material.FIRE) {
                 event.setCancelled(true);
                 return;
             }

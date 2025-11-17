@@ -193,6 +193,9 @@ public class PlayerScoreboard implements CommandExecutor {
         // Collect players and calculate distances
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (!p.equals(this.player)) {
+                if (p.getWorld() != this.player.getWorld()) {
+                    continue;
+                }
                 onlinePlayersDistance[index++] = new PlayerDistance(p, (int) player.getLocation().distance(p.getLocation()));
             }
         }
