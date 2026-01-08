@@ -73,9 +73,21 @@ public class PlayerListener implements Listener {
             Bukkit.dispatchCommand(console, "sharedinventory start hc");
         }
         if (config.getBoolean("autoScoreboard")) {
-            Bukkit.dispatchCommand(console, "scoreboard objectives add HP health");
-            Bukkit.dispatchCommand(console, "scoreboard objectives setdisplay list HP");
-            Bukkit.dispatchCommand(console, "scoreboard objectives setdisplay below_name HP");
+            org.bukkit.scoreboard.ScoreboardManager manager = Bukkit.getScoreboardManager();
+            if (manager != null) {
+                org.bukkit.scoreboard.Scoreboard scoreboard = manager.getMainScoreboard();
+                org.bukkit.scoreboard.Objective objective = scoreboard.getObjective("HP");
+                if (objective == null) {
+                    objective = scoreboard.registerNewObjective("HP", "health", "HP");
+                }
+                objective.setDisplaySlot(org.bukkit.scoreboard.DisplaySlot.PLAYER_LIST);
+
+                // Set below name display slot
+                org.bukkit.scoreboard.Objective belowNameObjective = scoreboard.getObjective("HP");
+                if (belowNameObjective != null) {
+                    belowNameObjective.setDisplaySlot(org.bukkit.scoreboard.DisplaySlot.BELOW_NAME);
+                }
+            }
         }
         if (config.getBoolean("autoOp")) {
             Bukkit.dispatchCommand(console, "op " + player.getName());
@@ -127,10 +139,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player player) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
             if (config.getBoolean("displayDamageMessages")) {
                 if (player.isBlocking()) return;
-                double damageAmount = event.getFinalDamage() - event.getOriginalDamage(EntityDamageEvent.DamageModifier.ABSORPTION) - event.getOriginalDamage(EntityDamageEvent.DamageModifier.RESISTANCE);
+                double damageAmount = event.getFinalDamage();
                 int health = (int) Math.ceil(player.getHealth() + player.getAbsorptionAmount() - damageAmount);
                 if (damageAmount >= config.getDouble("damageMessageMinThreshold")) {
                     Bukkit.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + (double) health / 2 + "\u2764" + ChatColor.GRAY + "] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has taken " + ChatColor.RED + (int) damageAmount + ChatColor.WHITE + " damage!");
@@ -144,7 +157,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerHeal(EntityRegainHealthEvent event) {
-        if (event.getEntity() instanceof Player player) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
             if (config.getBoolean("displayHealMessages")) {
                 double healAmount = Math.round(event.getAmount() * 10.0) / 10.0;
                 double health = Math.ceil(player.getHealth() + player.getAbsorptionAmount() - healAmount);
@@ -160,7 +174,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerHungerChange(FoodLevelChangeEvent event) {
-        if (event.getEntity() instanceof Player player) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
             if (config.getBoolean("sharedHunger")) {
                 updateStats(player, "hunger");
             }
@@ -169,7 +184,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPotionEffectChange(EntityPotionEffectEvent event) {
-        if (event.getEntity() instanceof Player player) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
             if (config.getBoolean("sharedEffects")) {
                 if (effectQueue.contains(event.getEntity())) return;
                 for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
@@ -192,8 +208,9 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onExperienceChange(PlayerExpChangeEvent event) {
-        if (event.getPlayer() instanceof Player player) {
+    public void onPlayerBedEnter(PlayerBedEnterEvent event) {
+        if (event.getPlayer() instanceof Player) {
+            Player player = (Player) event.getPlayer();
             if (config.getBoolean("sharedExperience")) {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     updateExp(player);
@@ -204,7 +221,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
-        if (event.getEnchanter() instanceof Player player) {
+        if (event.getEnchanter() instanceof Player) {
+            Player player = (Player) event.getEnchanter();
             if (config.getBoolean("sharedExperience")) {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     updateExp(player);
@@ -214,8 +232,9 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onAnvilUse(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player) {
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getWhoClicked() instanceof Player) {
+            Player player = (Player) event.getWhoClicked();
             if (config.getBoolean("sharedExperience")) {
                 if (event.getInventory() instanceof AnvilInventory) {
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {

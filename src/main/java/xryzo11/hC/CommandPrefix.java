@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,7 +90,13 @@ public class CommandPrefix implements CommandExecutor, TabCompleter {
                     return false;
                 }
                 if (args.length == 2) {
-                    playerScoreboards.get(((Player) sender).getUniqueId()).onCommand(sender, command, label, args);
+                    Player player = (Player) sender;
+                    PlayerScoreboard scoreboard = playerScoreboards.get(player.getUniqueId());
+                    if (scoreboard == null) {
+                        scoreboard = new PlayerScoreboard(player);
+                        playerScoreboards.put(player.getUniqueId(), scoreboard);
+                    }
+                    scoreboard.onCommand(sender, command, label, args);
                     return true;
                 } else {
                     sender.sendMessage(ChatColor.DARK_RED + "Usage: /hc sidelocator <on/off>");
@@ -112,10 +119,10 @@ public class CommandPrefix implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return List.of("config", "locator", "sidelocator", "help");
+            return Arrays.asList("config", "locator", "sidelocator", "help");
         } else if (args.length >= 2 && args[0].equalsIgnoreCase("config")) {
             if (args.length == 2) {
-                return List.of("save", "reset", "reload", "modify");
+                return Arrays.asList("save", "reset", "reload", "modify");
             } else if (args.length >= 3) {
                 List<String> completions = new ArrayList<>();
                 List<String> arguments = new ArrayList<>();
@@ -164,8 +171,8 @@ public class CommandPrefix implements CommandExecutor, TabCompleter {
             Collections.sort(completions);
             return completions;
         } else if (args.length >= 2 && args[0].equalsIgnoreCase("sidelocator")) {
-            return List.of("off", "on");
+            return Arrays.asList("off", "on");
         }
-        return List.of();
+        return Collections.emptyList();
     }
 }
