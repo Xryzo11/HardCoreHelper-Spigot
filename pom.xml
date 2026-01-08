@@ -26,6 +26,8 @@
             </activation>
             <properties>
                 <java.version>21</java.version>
+                <maven.compiler.source>21</maven.compiler.source>
+                <maven.compiler.target>21</maven.compiler.target>
                 <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
                 <minecraft.version>1.21</minecraft.version>
             </properties>
@@ -37,6 +39,8 @@
             <id>1.16</id>
             <properties>
                 <java.version>8</java.version>
+                <maven.compiler.source>8</maven.compiler.source>
+                <maven.compiler.target>8</maven.compiler.target>
                 <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
                 <minecraft.version>1.16</minecraft.version>
             </properties>
@@ -67,11 +71,7 @@
                                     <workingDirectory>${project.basedir}</workingDirectory>
                                     <arguments>
                                         <argument>/c</argument>
-                                        <argument>mvn</argument>
-                                        <argument>clean</argument>
-                                        <argument>package</argument>
-                                        <argument>-P</argument>
-                                        <argument>1.21</argument>
+                                        <argument>mvn clean package -P1.21 &amp;&amp; if not exist builds mkdir builds &amp;&amp; copy target\HC-1.0-SNAPSHOT-MC1.21.jar builds\</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -86,10 +86,7 @@
                                     <workingDirectory>${project.basedir}</workingDirectory>
                                     <arguments>
                                         <argument>/c</argument>
-                                        <argument>mvn</argument>
-                                        <argument>package</argument>
-                                        <argument>-P</argument>
-                                        <argument>1.16</argument>
+                                        <argument>mvn package -P1.16 &amp;&amp; copy target\HC-1.0-SNAPSHOT-MC1.16.jar builds\</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
