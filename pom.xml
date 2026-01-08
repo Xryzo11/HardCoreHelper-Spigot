@@ -14,7 +14,91 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
+        <minecraft.version>1.21</minecraft.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>1.21</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <java.version>21</java.version>
+                <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
+                <minecraft.version>1.21</minecraft.version>
+            </properties>
+            <build>
+                <finalName>${project.artifactId}-${project.version}-MC1.21</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>1.16</id>
+            <properties>
+                <java.version>8</java.version>
+                <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
+                <minecraft.version>1.16</minecraft.version>
+            </properties>
+            <build>
+                <finalName>${project.artifactId}-${project.version}-MC1.16</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>all</id>
+            <properties>
+                <java.version>21</java.version>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-mc-1.21</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>cmd</executable>
+                                    <workingDirectory>${project.basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>/c</argument>
+                                        <argument>mvn</argument>
+                                        <argument>clean</argument>
+                                        <argument>package</argument>
+                                        <argument>-P</argument>
+                                        <argument>1.21</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>build-mc-1.16</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>cmd</executable>
+                                    <workingDirectory>${project.basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>/c</argument>
+                                        <argument>mvn</argument>
+                                        <argument>package</argument>
+                                        <argument>-P</argument>
+                                        <argument>1.16</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -65,7 +149,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.21-R0.1-SNAPSHOT</version>
+            <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

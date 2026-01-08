@@ -1,7 +1,7 @@
 name: HC
 version: '1.0-SNAPSHOT'
 main: xryzo11.hC.HC
-api-version: '1.21'
+api-version: '${minecraft.version}'
 commands:
   hc:
     description: Main command. Use "/hc help"
